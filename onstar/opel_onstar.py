@@ -17,6 +17,7 @@ from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.const import (
             ATTR_BATTERY_LEVEL, CONF_PASSWORD, CONF_SCAN_INTERVAL, CONF_USERNAME, CONF_RESOURCES)
 
+REQUIREMENTS = ['onstar==0.1.0']
 DOMAIN = 'opel_onstar'
 DATA_KEY = DOMAIN
 
@@ -60,3 +61,5 @@ CONFIG_SCHEMA = vol.Schema({
     }),
 }, extra=vol.ALLOW_EXTRA)
 
+def setup(hass, config):
+    """Setup an onstar component"""

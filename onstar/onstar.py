@@ -17,7 +17,7 @@ class OnStar:
         self._password = password
         self._pin = pin
         self._loop = loop
-        self._dump_json = dump_json
+        self._dump_json = dump_json #if True - will print out formated JSON
         self._session = None
         self._token = None
         self._vehicle_id = None
