@@ -64,7 +64,8 @@ def main(loop):
     object = yield from data.text()
     print("Getting login info data, looking for first vehicleId:\n")
     dumpJson(json.loads(object) )
-    object = json.loads(object, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+
+    object = json.loads(object, object_hook=lambda d: namedtuple('X', list(map(lambda x:x.replace('$','_'),d.keys())))(*d.values()))
     vehicleId = object.results[0].vehicles[0].vehicle.vehicleId
     print("Found vehicleId: ")
     print(vehicleId)
