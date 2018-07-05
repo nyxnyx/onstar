@@ -27,27 +27,25 @@ class OnStar:
         self._POSITION_URL = 'https://gsp.eur.onstar.com/gspserver/services/vehicle/performLocationHistoryQuery.json'
         
     
-    def refresh(self):
-        yield from self._login()
-        yield from self._login_info()
-        yield from self._diagnostics()
-        yield from self._location()
-        self._session.close()
+    async def refresh(self):
+        await self._login()
+        await self._login_info()
+        await self._diagnostics()
+        await self._location()
+        await self._session.close()
 
 
     def dump_json(self, raw_string):
         if self._dump_json:
             print(json.dumps(json.loads(raw_string), sort_keys=True, indent=4, separators=(',', ': ')))
 
-
-    @asyncio.coroutine
-    def _login(self):
+    async def _login(self):
         payload = {'username': self._username, 'password': self._password, 'roleCode': 'driver', 'place': ''}
 
         self._session = aiohttp.ClientSession(loop=self._loop)
 
-        response = yield from self._session.post(self._LOGIN_URL, data=payload)
-        response_data = yield from response.text()
+        response = await self._session.post(self._LOGIN_URL, data=payload)
+        response_data = await response.text()
         self.dump_json(response_data)
 
         data = json.loads(response_data, object_hook=lambda d: namedtuple('X',list(map(lambda x:x.replace('$','_'),d.keys())))(*d.values()))
@@ -56,10 +54,9 @@ class OnStar:
         self._header = {'X-GM-token': self._token}
 
 
-    @asyncio.coroutine
-    def _login_info(self):
-        response = yield from self._session.get(self._LOGINIFO_URL, headers=self._header)
-        login_info_data = yield from response.text()
+    async def _login_info(self):
+        response = await self._session.get(self._LOGINIFO_URL, headers=self._header)
+        login_info_data = await response.text()
         self.dump_json(login_info_data)
         self._login_info_object = json.loads(login_info_data, object_hook=lambda d: namedtuple('X', list(map(lambda x:x.replace('$','_'),d.keys())))(*d.values()))
 
@@ -67,25 +64,23 @@ class OnStar:
         return self._login_info_object
 
     
-    @asyncio.coroutine
-    def _diagnostics(self):
+    async def _diagnostics(self):
         payload = {'vehicleId': self._vehicle_id}
 
-        response = yield from self._session.get(self._DIAGNOSTICS_URL, params = payload, headers = self._header)
-        diagnostics = yield from response.text()
+        response = await self._session.get(self._DIAGNOSTICS_URL, params = payload, headers = self._header)
+        diagnostics = await response.text()
         self.dump_json(diagnostics)
         diagnostics = diagnostics.replace('def','def_') #there is def field which must be renamed
         self._diagnostics_object = json.loads(diagnostics, object_hook=lambda d: namedtuple('X', list(map(lambda x:x.replace('$','_'),d.keys())))(*d.values()))
         return self._diagnostics_object
 
 
-    @asyncio.coroutine
-    def _location(self):
+    async def _location(self):
         payload = {'vehicleId': self._vehicle_id}
         header = {'X-GM-token': self._token, 'X-GM-pincode': self._pin}
         
-        response = yield from self._session.post(self._POSITION_URL, params = payload, headers = header)
-        location = yield from response.text()
+        response = await self._session.post(self._POSITION_URL, params = payload, headers = header)
+        location = await response.text()
         self.dump_json(location)
         self._location_object = json.loads(location, object_hook=lambda d: namedtuple('X', list(map(lambda x:x.replace('$','_'),d.keys())))(*d.values()))
         return self._location_object
