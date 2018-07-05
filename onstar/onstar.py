@@ -50,7 +50,7 @@ class OnStar:
         response_data = yield from response.text()
         self.dump_json(response_data)
 
-        data = json.loads(response_data, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+        data = json.loads(response_data, object_hook=lambda d: namedtuple('X',list(map(lambda x:x.replace('$','_'),d.keys())))(*d.values()))
         self._login_object = data
         self._token = data.results[0].token
         self._header = {'X-GM-token': self._token}
@@ -61,7 +61,7 @@ class OnStar:
         response = yield from self._session.get(self._LOGINIFO_URL, headers=self._header)
         login_info_data = yield from response.text()
         self.dump_json(login_info_data)
-        self._login_info_object = json.loads(login_info_data, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+        self._login_info_object = json.loads(login_info_data, object_hook=lambda d: namedtuple('X', list(map(lambda x:x.replace('$','_'),d.keys())))(*d.values()))
 
         self._vehicle_id = self._login_info_object.results[0].vehicles[0].vehicle.vehicleId
         return self._login_info_object
@@ -75,7 +75,7 @@ class OnStar:
         diagnostics = yield from response.text()
         self.dump_json(diagnostics)
         diagnostics = diagnostics.replace('def','def_') #there is def field which must be renamed
-        self._diagnostics_object = json.loads(diagnostics, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+        self._diagnostics_object = json.loads(diagnostics, object_hook=lambda d: namedtuple('X', list(map(lambda x:x.replace('$','_'),d.keys())))(*d.values()))
         return self._diagnostics_object
 
 
@@ -87,7 +87,7 @@ class OnStar:
         response = yield from self._session.post(self._POSITION_URL, params = payload, headers = header)
         location = yield from response.text()
         self.dump_json(location)
-        self._location_object = json.loads(location, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+        self._location_object = json.loads(location, object_hook=lambda d: namedtuple('X', list(map(lambda x:x.replace('$','_'),d.keys())))(*d.values()))
         return self._location_object
 
 
