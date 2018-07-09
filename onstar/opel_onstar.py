@@ -7,7 +7,7 @@ are using OnStar.
 import asyncio
 import logging
 
-
+from datetime import timedelta
 import voluptuous as vol
 
 from homeassistant.core import callback
