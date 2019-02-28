@@ -79,7 +79,7 @@ def main(loop):
     locate = yield from locate.text()
     dumpJson(json.loads(locate))
     print("Done for now")
-    session.close()
+    yield from session.close()
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main(loop))
