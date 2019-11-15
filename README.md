@@ -1,6 +1,6 @@
 # About
 Purpose of this project is to create atleast home-assitant component for getting information about your opel or
-other OnStar enabled car into home-assistant. I'm not related to Onstar.com company. If you are from Onstar.com company and reading this and want to access code - you have to pay me 1 000 000 EUR. So stop right now or pay to proceed. For further actions - please contanct me over github.
+other OnStar enabled car into home-assistant. I'm not related to Onstar.com company. If you are from Onstar.com company or represening it or other entities related to Onstar.com and reading this and want to access code - you have to pay me 1 000 000 EUR. So stop right now or pay to proceed. For further actions - please contanct me over github.
 
 URL investigated: https://gspweb.eur.onstar.com
 
