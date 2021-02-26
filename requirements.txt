@@ -3,7 +3,7 @@
 
 # src/demo.py: 1
 # src/onstar.py: 5
-aiohttp == 2.3.10
+aiohttp == 3.7.4
 
 # src/opel_onstar.py: 17
 homeassistant == 0.63.3
